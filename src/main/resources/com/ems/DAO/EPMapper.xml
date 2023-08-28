@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ems.DAO.EPMapper">
+
+    <insert id="add">
+        insert into emswaring (name, address, power, voltage, state, time, remark)
+        VALUES (#{name}, #{address}, #{realTimePower}, #{realTimeVoltage}, #{status}, #{applyTime}, #{remark})
+    </insert>
+
+    <update id="update">
+        update emswaring
+        <set>
+            <if test="name !=null and name !=''">
+                name=#{name},
+            </if>
+            <if test="address!=null and address!=''">
+                address=#{address},
+            </if>
+            <if test="realTimePower !=null and realTimePower !='' ">
+                power=#{realTimePower},
+            </if>
+            <if test="realTimeVoltage !=null and realTimeVoltage !=''">
+                voltage=#{realTimeVoltage},
+            </if>
+            <if test="status !=null and status !=''">
+                state=#{status},
+            </if>
+            <if test="applyTime !=null">
+                time=#{applyTime},
+            </if>
+            <if test="remark !=null">
+                remark=#{remark}
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+        <delete id="delete">
+            delete from emswaring where id=#{id}
+        </delete>
+    <select id="list" resultType="com.ems.POJO.EnergyPoint">
+        select *
+        from emswaring
+        <where>
+            <if test="name!=null and name!='' ">
+                name like concat('%', #{name}, '%')
+            </if>
+
+            <if test="address!=null">
+                and address = #{address}
+            </if>
+
+            <if test="state!=null">
+                and state=#{state}
+            </if>
+        </where>
+        order by time desc
+    </select>
+</mapper>
